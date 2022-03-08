@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>收入和纳税关系图</title>
+</head>
+
+<body style="margin: 0;padding: 0;">
+  <div id="main" style="width: 100vw;height: 100vh;"></div>
+  <script type="module">
+    import * as echarts from 'https://cdn.jsdelivr.net/npm/echarts@5.3.1/dist/echarts.esm.js';
+    var chartDom = document.getElementById('main');
+    var myChart = echarts.init(chartDom);
+    var option;
+    function c(n) {
+      let e = n - 60000;
+      if (e < 0) {
+        return 0;
+      }
+      if (e < 36000) {
+        return e * 0.03 - 0;
+      } else if (e <= 144000) {
+        return e * 0.1 - 2520;
+      } else if (e <= 300000) {
+        return e * 0.2 - 16920;
+      } else if (e <= 420000) {
+        return e * 0.25 - 31920;
+      } else if (e <= 660000) {
+        return e * 0.3 - 52920;
+      } else if (e <= 960000) {
+        return e * 0.35 - 85920;
+      } else {
+        return e * 0.45 - 181920;
+      }
+    }
+
+    var axisData = Array.from({ length: 1500 }).map((v, i) => i * 1000);
+    var lineData = axisData.map(c);
+    option = {
+      title: {
+        text: '收入和纳税关系图'
+      },
+      tooltip: {
+        trigger: 'axis',
+        formatter: '收入{b0}元需缴纳个税{c0}元'
+      },
+      xAxis: {
+        type: 'category',
+        data: axisData,
+        name: '收入'
+      },
+      yAxis: {
+        type: 'value',
+        name: '税款'
+      },
+      series: [
+        {
+          data: lineData,
+          type: 'line',
+          showSymbol: false
+        }
+      ]
+    };
+
+    option && myChart.setOption(option);
+
+  </script>
+</body>
+
+</html>
